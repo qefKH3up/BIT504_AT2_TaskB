@@ -2,3 +2,7 @@
 /PongPanel.class
 /Pong$1.class
 /Sprite.class
+/Ball.class
+/Player.class
+/Paddle.class
+/GameState.class

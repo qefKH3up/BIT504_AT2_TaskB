@@ -22,6 +22,50 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private final static Color BACKGROUND_COLOUR = Color.BLACK;
 	// Sets the time between calls.
 	private final static int TIMER_DELAY = 5;
+	// When this becomes true game starts.
+	// Bool not ideal to initialise sophisticated games that may want pause or title
+	// screen etc features.
+	// boolean gameInitialised = false;
+	GameState gameState = GameState.INITIALISING;
+	// Create new ball variable.
+	Ball ball;
+	Paddle paddle1, paddle2;
+
+	public void createObjects() {
+		// Start a new ball object with its width and height properties.
+		ball = new Ball(getWidth(), getHeight());
+		paddle1 = new Paddle(Player.One, getWidth(), getHeight());
+		paddle2 = new Paddle(Player.Two, getWidth(), getHeight());
+	}
+
+	// If game is initialised, call createObjects to start game.
+	// Create the objects here, not in a constructor, because the objects need panel
+	// width/height initialised before they get created
+	// (they depend on these values)
+	/*
+	 * private void update() { // If gameInitialised is false (! = not). if
+	 * (!gameInitialised) { createObjects(); gameInitialised = true; } }
+	 */
+	private void update() {
+		switch (gameState) {
+		case INITIALISING: {
+			createObjects();
+			gameState = GameState.PLAYING;
+			break;
+		}
+		case PLAYING: {
+			break;
+		}
+		case GAMEOVER: {
+			break;
+		}
+		}
+	}
+
+	private void paintSprite(Graphics g, Sprite sprite) {
+		g.setColor(sprite.getColour());
+		g.fillRect(sprite.getxPosition(), sprite.getyPosition(), sprite.getWidth(), sprite.getHeight());
+	}
 
 	public PongPanel() {
 		// Import java.awt.Color for this.
@@ -57,24 +101,28 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		update();
 	}
 
-	// Method which contains logic for each frame update of the game.
-	private void update() {
-	}
-
 	// paintComponent() method which paints graphics to the screen.
 	// Requires import java.awt.Graphics; and import java.awt.Graphics2D;
+	/*
+	 * @Override public void paintComponent(Graphics g) { super.paintComponent(g);
+	 * // Testing the graphics (draws a rectangle) // g.setColor(Color.WHITE); //
+	 * g.fillRect(20, 20, 100, 100); // Calling the plaintDottedLine method
+	 * super.paintComponent(g); paintDottedLine(g); if (gameInitialised) {
+	 * paintSprite(g, ball); } paintDottedLine(g); }
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// Testing the graphics (draws a rectangle)
-		// g.setColor(Color.WHITE);
-		// g.fillRect(20, 20, 100, 100);
-		
-		// Calling the plaintDottedLine method 
-	    paintDottedLine(g);
+		paintDottedLine(g);
+		if (gameState != GameState.INITIALISING) {
+			paintSprite(g, ball);
+			paintSprite(g, paddle1);
+			paintSprite(g, paddle2);
+		}
 	}
 
-	// Draws the dotted line down the middle. Will be called from the paintComponent method.
+	// Draws the dotted line down the middle. Will be called from the paintComponent
+	// method.
 	// Don't focus too much on trying to understand this bit.
 	private void paintDottedLine(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
