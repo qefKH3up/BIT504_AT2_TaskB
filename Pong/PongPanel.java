@@ -8,6 +8,10 @@ import javax.swing.Timer;
 // For Graphics
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+// For drawing
+import java.awt.Stroke;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 
 // This class will be handling the game logic along with anything related to the game, such as the score, ball, and paddles.
 // This class inherits from JPanel class, which allows program to draw things in the frame.
@@ -62,7 +66,23 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.WHITE);
-		g.fillRect(20, 20, 100, 100);
+		// Testing the graphics (draws a rectangle)
+		// g.setColor(Color.WHITE);
+		// g.fillRect(20, 20, 100, 100);
+		
+		// Calling the plaintDottedLine method 
+	    paintDottedLine(g);
+	}
+
+	// Draws the dotted line down the middle. Will be called from the paintComponent method.
+	// Don't focus too much on trying to understand this bit.
+	private void paintDottedLine(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.setPaint(Color.WHITE);
+		// using the width and height of the window as parameters for drawing the line.
+		g2d.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
+		g2d.dispose();
 	}
 }
